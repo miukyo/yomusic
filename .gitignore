@@ -1,0 +1,8 @@
+.vs
+obj
+bin
+Generated Files
+BundleArtifacts
+AppPackages
+*.pfx
+*.user

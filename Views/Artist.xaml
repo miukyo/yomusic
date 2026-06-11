@@ -1,0 +1,75 @@
+<Page
+    x:Class="yomusic.Views.Artist"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d">
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled">
+            <StackPanel Spacing="0">
+                <StackPanel.ChildrenTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition IsStaggeringEnabled="True" />
+                    </TransitionCollection>
+                </StackPanel.ChildrenTransitions>
+                <Grid Height="320">
+                    <Grid x:Name="HeroContainer" />
+                    <StackPanel
+                        Padding="24,0,24,24"
+                        VerticalAlignment="Bottom"
+                        Spacing="4">
+                        <TextBlock
+                            x:Name="ArtistName"
+                            FontSize="34"
+                            FontWeight="SemiBold" />
+                        <TextBlock x:Name="ArtistDescription" FontSize="14" />
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Padding="24,16,24,140" Spacing="16">
+
+                    <TextBlock
+                        x:Name="SongsTitle"
+                        FontSize="20"
+                        FontWeight="SemiBold"
+                        Text="Songs"
+                        Visibility="Collapsed" />
+                    <StackPanel x:Name="SongList">
+                        <StackPanel.ChildrenTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition IsStaggeringEnabled="True" />
+                            </TransitionCollection>
+                        </StackPanel.ChildrenTransitions>
+                    </StackPanel>
+
+                    <StackPanel x:Name="SectionList">
+                        <StackPanel.ChildrenTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition IsStaggeringEnabled="True" />
+                            </TransitionCollection>
+                        </StackPanel.ChildrenTransitions>
+                    </StackPanel>
+
+                    <TextBlock
+                        x:Name="EmptyText"
+                        HorizontalAlignment="Center"
+                        FontSize="16"
+                        Text="No content found"
+                        Visibility="Collapsed" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <muxc:ProgressRing
+            x:Name="LoadingRing"
+            Width="40"
+            Height="40"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsActive="True"
+            Visibility="Visible" />
+    </Grid>
+</Page>

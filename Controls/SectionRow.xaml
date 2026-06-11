@@ -1,0 +1,61 @@
+<UserControl
+    x:Class="yomusic.Controls.SectionRow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Spacing="12">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                x:Name="TitleText"
+                HorizontalAlignment="Stretch"
+                FontSize="24"
+                FontWeight="SemiBold" />
+            <Button
+                x:Name="LeftButton"
+                Width="40"
+                Height="40"
+                Margin="0,0,46,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Click="OnLeftClick"
+                Content="{StaticResource MgcLeftFill}"
+                CornerRadius="20"
+                FontFamily="{StaticResource MingCute}"
+                IsEnabled="False" />
+
+            <Button
+                x:Name="RightButton"
+                Width="40"
+                Height="40"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Click="OnRightClick"
+                Content="{StaticResource MgcRightFill}"
+                CornerRadius="20"
+                FontFamily="{StaticResource MingCute}"
+                IsEnabled="False" />
+        </Grid>
+
+        <Grid>
+            <ScrollViewer
+                x:Name="ContentScrollViewer"
+                HorizontalScrollBarVisibility="Hidden"
+                HorizontalScrollMode="Disabled"
+                ScrollViewer.ViewChanged="OnScrollViewChanged"
+                VerticalScrollBarVisibility="Disabled"
+                VerticalScrollMode="Disabled">
+                <StackPanel x:Name="ContentPanel" Orientation="Horizontal" />
+            </ScrollViewer>
+
+        </Grid>
+    </StackPanel>
+</UserControl>

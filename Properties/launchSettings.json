@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "yomusic": {
+      "commandName": "MsixPackage",
+      "nativeDebugging": false
+    }
+  }
+}

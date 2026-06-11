@@ -1,0 +1,22 @@
+<UserControl
+    x:Class="yomusic.Controls.SectionGrid"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d">
+
+    <StackPanel Spacing="12">
+        <TextBlock
+            x:Name="TitleText"
+            FontSize="24"
+            FontWeight="SemiBold" />
+
+        <VariableSizedWrapGrid
+            x:Name="ContentGrid"
+            ItemHeight="242"
+            ItemWidth="192"
+            Orientation="Horizontal" />
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,66 @@
+<Page
+    x:Class="yomusic.Views.Playlist"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d">
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled">
+            <StackPanel Padding="24,24,24,140" Spacing="16">
+                <StackPanel.ChildrenTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition IsStaggeringEnabled="True" />
+                    </TransitionCollection>
+                </StackPanel.ChildrenTransitions>
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                    <Border
+                        Width="200"
+                        Height="200"
+                        CornerRadius="8">
+                        <Image x:Name="PlaylistThumbnail" Stretch="UniformToFill" />
+                    </Border>
+                    <StackPanel VerticalAlignment="Bottom">
+                        <TextBlock
+                            x:Name="PlaylistTitle"
+                            FontSize="34"
+                            FontWeight="SemiBold" />
+                        <TextBlock x:Name="ArtistName" FontSize="16" />
+                        <TextBlock
+                            x:Name="DescriptionText"
+                            FontSize="14"
+                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <TextBlock
+                    x:Name="TrackTitle"
+                    FontSize="20"
+                    FontWeight="SemiBold"
+                    Text="Tracks"
+                    Visibility="Collapsed" />
+                <StackPanel x:Name="TrackList" />
+
+                <StackPanel x:Name="SectionList" />
+
+                <TextBlock
+                    x:Name="EmptyText"
+                    HorizontalAlignment="Center"
+                    FontSize="16"
+                    Text="No tracks found"
+                    Visibility="Collapsed" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <muxc:ProgressRing
+            x:Name="LoadingRing"
+            Width="40"
+            Height="40"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsActive="True"
+            Visibility="Visible" />
+    </Grid>
+</Page>
