@@ -6,3 +6,5 @@ BundleArtifacts
 AppPackages
 *.pfx
 *.user
+*.css
+*.py
