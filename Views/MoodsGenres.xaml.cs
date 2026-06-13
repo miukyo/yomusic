@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using yomusic.Controls;
+using yomusic.Helpers;
 using yomusic.Models;
 using yomusic.Services;
 using ytmusic_net;
@@ -24,6 +25,8 @@ namespace yomusic.Views
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Disabled;
+            AnimationHelper.SetEntranceTransition(MoodsHeaderPanel);
+            AnimationHelper.SetEntranceTransition(SectionList);
             MoodsLeftBtn.Click += OnMoodsLeftClick;
             MoodsRightBtn.Click += OnMoodsRightClick;
             MoodsScrollViewer.ViewChanged += OnMoodsScrollChanged;

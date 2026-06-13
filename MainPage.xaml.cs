@@ -344,7 +344,8 @@ namespace yomusic
             { "Explore", typeof(Explore) },
             { "Library", typeof(Library) },
             { "Moods", typeof(MoodsGenres) },
-            { "History", typeof(Views.History) }
+            { "History", typeof(History) },
+            { "Settings", typeof(Settings) }
         };
 
         private void SetupCustomTitleBar()
@@ -426,10 +427,54 @@ namespace yomusic
             AnimateNavItem(LibraryPanel, LibraryIconContainer, LibraryIconOutline, LibraryIconFilled, LibraryText, activeTag == "Library");
             AnimateNavItem(MoodsPanel, MoodsIconContainer, MoodsIconOutline, MoodsIconFilled, MoodsText, activeTag == "Moods");
             AnimateNavItem(HistoryPanel, HistoryIconContainer, HistoryIconOutline, HistoryIconFilled, HistoryText, activeTag == "History");
+            AnimateNavItem(SettingsPanel, SettingsIconContainer, SettingsIconOutline, SettingsIconFilled, SettingsText, activeTag == "Settings");
+        }
+
+        private void OnPageKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            var ts = TrackService.Instance;
+            switch (e.Key)
+            {
+                case Windows.System.VirtualKey.Space:
+                    ts.PlayPause();
+                    e.Handled = true;
+                    break;
+                case Windows.System.VirtualKey.Left:
+                    ts.Seek(TimeSpan.FromSeconds(Math.Max(0, ts.Position.TotalSeconds - 5)));
+                    e.Handled = true;
+                    break;
+                case Windows.System.VirtualKey.Right:
+                    ts.Seek(TimeSpan.FromSeconds(Math.Min(ts.Duration.TotalSeconds, ts.Position.TotalSeconds + 5)));
+                    e.Handled = true;
+                    break;
+            }
         }
 
         private void AnimateNavItem(StackPanel panel, Grid iconContainer, IconElement outlineIcon, IconElement filledIcon, TextBlock text, bool isSelected)
         {
+            if (!SettingsService.Instance.EnableAnimations)
+            {
+                text.Opacity = isSelected ? 0.0 : 1.0;
+                outlineIcon.Opacity = isSelected ? 0.0 : 1.0;
+                filledIcon.Opacity = isSelected ? 1.0 : 0.0;
+                var t = iconContainer.RenderTransform as TranslateTransform;
+                if (t == null)
+                {
+                    t = new TranslateTransform();
+                    iconContainer.RenderTransform = t;
+                }
+                t.Y = isSelected ? 9.0 : 0.0;
+                var s = panel.RenderTransform as ScaleTransform;
+                if (s == null)
+                {
+                    s = new ScaleTransform();
+                    panel.RenderTransform = s;
+                }
+                s.ScaleX = 1.0;
+                s.ScaleY = 1.0;
+                return;
+            }
+
             var storyboard = new Storyboard();
             var duration = TimeSpan.FromMilliseconds(220);
             var ease = new CubicEase { EasingMode = EasingMode.EaseOut };

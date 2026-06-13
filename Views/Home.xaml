@@ -31,11 +31,6 @@
                         FontFamily="{StaticResource MingCute}" />
                 </Grid>
                 <StackPanel x:Name="SectionList">
-                    <StackPanel.ChildrenTransitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition IsStaggeringEnabled="True" />
-                        </TransitionCollection>
-                    </StackPanel.ChildrenTransitions>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

@@ -361,9 +361,17 @@ namespace yomusic.Services
                     .Where(s => s is IAudioStreamInfo)
                     .OrderByDescending(s => s.Bitrate.BitsPerSecond)
                     .ToList();
-                if (all.Count > 0)
-                    return all[0].Url;
-                return null;
+                if (all.Count == 0) return null;
+
+                var quality = SettingsService.Instance.AudioQuality;
+                int index = quality switch
+                {
+                    0 => all.Count - 1,
+                    2 => 0,
+                    _ => all.Count / 2
+                };
+                index = Math.Clamp(index, 0, all.Count - 1);
+                return all[index].Url;
             }
             catch
             {

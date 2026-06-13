@@ -82,7 +82,7 @@ namespace yomusic.Services
             var result = new LyricsResult
             {
                 Source = source,
-                Type = LyricsType.Line,
+                Type = LyricsType.Synced,
             };
             var lineRegex = new Regex(@"\[(\d{2}):(\d{2})\.(\d{2,3})\](.*)");
             foreach (var line in lrc.Split('\n'))

@@ -88,11 +88,6 @@
                 Grid.Row="1"
                 Visibility="Visible">
                 <StackPanel x:Name="QueueList" Margin="0,0,0,140">
-                    <StackPanel.ChildrenTransitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition IsStaggeringEnabled="True" />
-                        </TransitionCollection>
-                    </StackPanel.ChildrenTransitions>
                 </StackPanel>
             </ScrollViewer>
 
@@ -100,6 +95,7 @@
                 x:Name="LyricsPanel"
                 Grid.Row="1"
                 Margin="0,16,0,0"
+                VerticalScrollBarVisibility="Hidden"
                 Visibility="Collapsed">
                 <Grid>
                     <StackPanel

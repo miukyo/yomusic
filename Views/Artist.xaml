@@ -9,12 +9,7 @@
 
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled">
-            <StackPanel Spacing="0">
-                <StackPanel.ChildrenTransitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition IsStaggeringEnabled="True" />
-                    </TransitionCollection>
-                </StackPanel.ChildrenTransitions>
+            <StackPanel x:Name="RootPanel" Spacing="0">
                 <Grid Height="320">
                     <Grid x:Name="HeroContainer" />
                     <StackPanel
@@ -38,19 +33,9 @@
                         Text="Songs"
                         Visibility="Collapsed" />
                     <StackPanel x:Name="SongList">
-                        <StackPanel.ChildrenTransitions>
-                            <TransitionCollection>
-                                <EntranceThemeTransition IsStaggeringEnabled="True" />
-                            </TransitionCollection>
-                        </StackPanel.ChildrenTransitions>
                     </StackPanel>
 
                     <StackPanel x:Name="SectionList">
-                        <StackPanel.ChildrenTransitions>
-                            <TransitionCollection>
-                                <EntranceThemeTransition IsStaggeringEnabled="True" />
-                            </TransitionCollection>
-                        </StackPanel.ChildrenTransitions>
                     </StackPanel>
 
                     <TextBlock

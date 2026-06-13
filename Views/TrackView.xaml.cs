@@ -72,7 +72,7 @@ namespace yomusic.Views
 
         private void OnPositionChanged(TimeSpan position, TimeSpan duration)
         {
-            if (_lyrics == null || _lyrics.Lines.Count == 0) return;
+            if (_lyrics == null || _lyrics.Lines.Count == 0 || _lyrics.Type != LyricsType.Synced) return;
             var seconds = position.TotalSeconds + 0.3;
             var index = -1;
             for (int i = _lyrics.Lines.Count - 1; i >= 0; i--)
@@ -206,6 +206,11 @@ namespace yomusic.Views
         {
             if (tb.Foreground is SolidColorBrush brush)
             {
+                if (!SettingsService.Instance.EnableAnimations)
+                {
+                    brush.Color = targetColor;
+                    return;
+                }
                 var storyboard = new Storyboard();
                 var anim = new ColorAnimation
                 {
@@ -222,6 +227,11 @@ namespace yomusic.Views
 
         private void AnimateOpacity(UIElement element, float target)
         {
+            if (!SettingsService.Instance.EnableAnimations)
+            {
+                element.Opacity = target;
+                return;
+            }
             var visual = ElementCompositionPreview.GetElementVisual(element);
             var anim = visual.Compositor.CreateScalarKeyFrameAnimation();
             anim.Duration = TimeSpan.FromMilliseconds(300);
@@ -239,7 +249,7 @@ namespace yomusic.Views
             {
                 for (int i = 0; i < queue.Count; i++)
                 {
-                    if (QueueList.Children[i] is Grid grid && grid.Tag is int tag && tag == i)
+                    if (QueueList.Children[i] is Grid grid && grid.Tag is string vid && vid == queue[i].VideoId)
                         continue;
                     same = false;
                     break;
@@ -267,32 +277,21 @@ namespace yomusic.Views
                 {
                     Padding = new Thickness(8),
                     ColumnSpacing = 12,
-                    Tag = idx
+                    Tag = item.VideoId
                 };
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
-                if (idx == currentIndex)
+
+                grid.Children.Add(new Grid
                 {
-                    grid.Children.Add(new Grid
-                    {
-                        Width = 4,
-                        Height = 40,
-                        CornerRadius = new CornerRadius(2),
-                        Background = accent
-                    });
-                }
-                else
-                {
-                    var bar = new Grid
-                    {
-                        Width = 4,
-                        Height = 40,
-                        CornerRadius = new CornerRadius(2),
-                    };
-                    grid.Children.Insert(0, bar);
-                }
+                    Width = 4,
+                    Height = 40,
+                    CornerRadius = new CornerRadius(2),
+                    Background = i == currentIndex ? accent : null
+                });
+
 
                 var thumb = item.Thumbnail;
                 if (thumb == null && !string.IsNullOrEmpty(item.ThumbnailUrl))
@@ -357,42 +356,33 @@ namespace yomusic.Views
         private void UpdateQueueIndicators(int currentIndex)
         {
             var accent = (Brush)Application.Current.Resources["SystemControlHighlightAccentBrush"];
-            var fg = (Brush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"];
 
             for (int i = 0; i < QueueList.Children.Count; i++)
             {
-                if (QueueList.Children[i] is Grid grid && grid.Tag is int idx)
+                if (QueueList.Children[i] is Grid grid)
                 {
-                    var accentBar = grid.Children.FirstOrDefault(c => c is Grid g && Math.Abs(g.Width - 4) < 0.5) as Grid;
-                    if (accentBar != null)
-                        grid.Children.Remove(accentBar);
+                    var bar = grid.Children.FirstOrDefault(c => c is Grid g && Math.Abs(g.Width - 4) < 0.5) as Grid;
+                    if (bar != null)
+                        grid.Children.Remove(bar);
 
                     if (grid.Children[grid.Children.Count - 1] is StackPanel sp && sp.Children[0] is TextBlock title)
-                        title.FontWeight = idx == currentIndex ? FontWeights.SemiBold : FontWeights.Normal;
+                        title.FontWeight = i == currentIndex ? FontWeights.SemiBold : FontWeights.Normal;
 
-                    if (idx == currentIndex)
+                    grid.Children.Insert(0, new Grid
                     {
-                        var bar = new Grid
-                        {
-                            Width = 4,
-                            Height = 40,
-                            CornerRadius = new CornerRadius(2),
-                            Background = accent
-                        };
-                        grid.Children.Insert(0, bar);
-                    } else
-                    {
-                        var bar = new Grid
-                        {
-                            Width = 4,
-                            Height = 40,
-                            CornerRadius = new CornerRadius(2),
-                        };
-                        grid.Children.Insert(0, bar);
-                    }
+                        Width = 4,
+                        Height = 40,
+                        CornerRadius = new CornerRadius(2),
+                        Background = i == currentIndex ? accent : null
+                    });
                 }
             }
 
+            if (currentIndex >= 0 && currentIndex < QueueList.Children.Count)
+            {
+                var element = QueueList.Children[currentIndex] as FrameworkElement;
+                element?.StartBringIntoView(new BringIntoViewOptions { VerticalAlignmentRatio = 0.3 });
+            }
         }
 
         private void OnQueueTabClick(object sender, RoutedEventArgs e)
@@ -410,5 +400,6 @@ namespace yomusic.Views
             LyricsTabBtn.Foreground = (Brush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"];
             QueueTabBtn.Foreground = (Brush)Application.Current.Resources["SystemControlForegroundBaseLowBrush"];
         }
+
     }
 }

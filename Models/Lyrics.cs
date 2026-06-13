@@ -6,7 +6,8 @@ namespace yomusic.Models
     public enum LyricsType
     {
         None,
-        Line
+        Line,
+        Synced
     }
 
     public sealed class LyricsResult

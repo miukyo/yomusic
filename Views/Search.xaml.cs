@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using yomusic.Controls;
+using yomusic.Helpers;
 using yomusic.Models;
 using yomusic.Services;
 using ytmusic_net;
@@ -23,6 +24,7 @@ namespace yomusic.Views
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Disabled;
+            AnimationHelper.SetEntranceTransition(RootPanel);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -52,73 +54,70 @@ namespace yomusic.Views
             try
             {
                 var client = await YTMusicClient.Client;
-                var results = await client.SearchAsync(query, null, null, 20);
+
+                var songsTask = client.SearchSongsAsync(query);
+                var videosTask = client.SearchVideosAsync(query);
+                var artistsTask = client.SearchArtistsAsync(query);
+                var albumsTask = client.SearchAlbumsAsync(query);
+                var playlistsTask = client.SearchPlaylistsAsync(query);
+
+                await Task.WhenAll(songsTask, videosTask, artistsTask, albumsTask, playlistsTask);
 
                 if (token.IsCancellationRequested) return;
 
                 QueryText.Text = "Search result for \"" + query + "\"";
 
-                if (results.Count > 0)
-                {
-                    var groups = results.GroupBy(r => r.Category ?? r.Type);
-                    foreach (var group in groups)
-                    {
-                        var contents = new List<ContentItem>();
-                        foreach (var item in group)
-                        {
-                            var ci = new ContentItem
-                            {
-                                Name = item.Name,
-                                Thumbnail = ThumbnailHelper.GetThumbnail(item.Thumbnails),
-                            };
-                            switch (item)
-                            {
-                                case SongDetailed s:
-                                    ci.Type = "SONG";
-                                    ci.ArtistName = s.Artist?.Name ?? "";
-                                    ci.VideoId = s.VideoId;
-                                    ci.Duration = DurationHelper.FormatDuration(s.Duration);
-                                    break;
-                                case VideoDetailed v:
-                                    ci.Type = "VIDEO";
-                                    ci.ArtistName = v.Artist?.Name ?? "";
-                                    ci.VideoId = v.VideoId;
-                                    ci.Duration = DurationHelper.FormatDuration(v.Duration);
-                                    break;
-                                case AlbumDetailed a:
-                                    ci.Type = "ALBUM";
-                                    ci.ArtistName = a.Artist?.Name ?? "";
-                                    ci.BrowseId = a.AlbumId;
-                                    break;
-                                case PlaylistDetailed p:
-                                    ci.Type = "PLAYLIST";
-                                    ci.ArtistName = p.Artist?.Name ?? "";
-                                    ci.BrowseId = p.PlaylistId;
-                                    break;
-                                case ArtistDetailed ar:
-                                    ci.Type = "ARTIST";
-                                    ci.ArtistName = ar.Name;
-                                    ci.BrowseId = ar.ArtistId;
-                                    break;
-                            }
-                            contents.Add(ci);
-                        }
+                var any = false;
 
-                        SectionList.Children.Add(new SectionRow
-                        {
-                            Margin = new Thickness(0, 28, 0, 0),
-                            DataContext = new SectionModel
-                            {
-                                Title = group.Key ?? group.First().Type.ToLowerInvariant(),
-                                Contents = contents
-                            }
-                        });
-                    }
-                }
-                else
+                void AddSection<T>(List<T> items, string title, Func<T, ContentItem> map)
                 {
-                    EmptyText.Visibility = Visibility.Visible;
+                    if (items.Count == 0) return;
+                    any = true;
+                    SectionList.Children.Add(new SectionRow
+                    {
+                        Margin = new Thickness(0, 28, 0, 0),
+                        DataContext = new SectionModel
+                        {
+                            Title = title,
+                            Contents = items.Select(map).ToList()
+                        }
+                    });
                 }
+
+                AddSection(songsTask.Result, "Songs", (SongDetailed s) => new ContentItem
+                {
+                    Type = "SONG", Name = s.Name, Thumbnail = ThumbnailHelper.GetThumbnail(s.Thumbnails),
+                    ArtistName = s.Artist?.Name ?? "", VideoId = s.VideoId,
+                    Duration = DurationHelper.FormatDuration(s.Duration)
+                });
+
+                AddSection(videosTask.Result, "Videos", (VideoDetailed v) => new ContentItem
+                {
+                    Type = "VIDEO", Name = v.Name, Thumbnail = ThumbnailHelper.GetThumbnail(v.Thumbnails),
+                    ArtistName = v.Artist?.Name ?? "", VideoId = v.VideoId,
+                    Duration = DurationHelper.FormatDuration(v.Duration)
+                });
+
+                AddSection(artistsTask.Result, "Artists", (ArtistDetailed a) => new ContentItem
+                {
+                    Type = "ARTIST", Name = a.Name, Thumbnail = ThumbnailHelper.GetThumbnail(a.Thumbnails),
+                    BrowseId = a.ArtistId
+                });
+
+                AddSection(albumsTask.Result, "Albums", (AlbumDetailed a) => new ContentItem
+                {
+                    Type = "ALBUM", Name = a.Name, Thumbnail = ThumbnailHelper.GetThumbnail(a.Thumbnails),
+                    ArtistName = a.Artist?.Name ?? "", BrowseId = a.AlbumId
+                });
+
+                AddSection(playlistsTask.Result, "Playlists", (PlaylistDetailed p) => new ContentItem
+                {
+                    Type = "PLAYLIST", Name = p.Name, Thumbnail = ThumbnailHelper.GetThumbnail(p.Thumbnails),
+                    ArtistName = p.Artist?.Name ?? "", BrowseId = p.PlaylistId
+                });
+
+                if (!any)
+                    EmptyText.Visibility = Visibility.Visible;
             }
             catch (OperationCanceledException) { }
             catch

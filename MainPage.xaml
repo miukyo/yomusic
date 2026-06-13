@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mcuxc="using:CommunityToolkit.WinUI.Controls"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    KeyDown="OnPageKeyDown"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     mc:Ignorable="d">
     <Grid>
@@ -245,7 +246,8 @@
                             Text="Moods" />
                     </StackPanel>
                 </muxc:NavigationViewItem>
-
+            </muxc:NavigationView.MenuItems>
+            <muxc:NavigationView.FooterMenuItems>
                 <muxc:NavigationViewItem Tag="History">
                     <StackPanel
                         x:Name="HistoryPanel"
@@ -287,7 +289,48 @@
                             Text="History" />
                     </StackPanel>
                 </muxc:NavigationViewItem>
-            </muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem Tag="Settings">
+                    <StackPanel
+                        x:Name="SettingsPanel"
+                        Margin="-9,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        RenderTransformOrigin="0.5,0.5">
+                        <StackPanel.RenderTransform>
+                            <ScaleTransform />
+                        </StackPanel.RenderTransform>
+                        <Grid
+                            x:Name="SettingsIconContainer"
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center">
+                            <Grid.RenderTransform>
+                                <TranslateTransform />
+                            </Grid.RenderTransform>
+                            <FontIcon
+                                x:Name="SettingsIconOutline"
+                                FontFamily="{StaticResource MingCute}"
+                                FontSize="24"
+                                Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                Glyph="{StaticResource MgcSettings3Line}" />
+                            <FontIcon
+                                x:Name="SettingsIconFilled"
+                                FontFamily="{StaticResource MingCute}"
+                                FontSize="24"
+                                Foreground="{ThemeResource SystemControlHighlightAccentBrush}"
+                                Glyph="{StaticResource MgcSettings3Fill}"
+                                Opacity="0" />
+                        </Grid>
+                        <TextBlock
+                            x:Name="SettingsText"
+                            Margin="0,6,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="11"
+                            Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                            Text="Settings" />
+                    </StackPanel>
+                </muxc:NavigationViewItem>
+            </muxc:NavigationView.FooterMenuItems>
             <muxc:NavigationView.Content>
                 <Frame x:Name="ContentFrame" />
             </muxc:NavigationView.Content>

@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using yomusic.Controls;
+using yomusic.Helpers;
 using yomusic.Models;
 using yomusic.Services;
 using ytmusic_net;
@@ -24,6 +25,7 @@ namespace yomusic.Views
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Disabled;
+            AnimationHelper.SetEntranceTransition(RootPanel);
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)

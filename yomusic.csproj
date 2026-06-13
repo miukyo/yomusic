@@ -28,6 +28,7 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Labs.Uwp.Controls.TitleBar" Version="0.1.251217-build.2433" />
 		<PackageReference Include="CommunityToolkit.Uwp.Controls.Primitives" Version="8.2.251219" />
+		<PackageReference Include="CommunityToolkit.Uwp.Controls.SettingsControls" Version="8.2.251219" />
 		<PackageReference Include="CommunityToolkit.Uwp.Lottie" Version="8.2.250604" />
 		<PackageReference Include="FFmpegInteropX" Version="2.0.0" />
 		<PackageReference Include="Microsoft.UI.Xaml" Version="2.8.7" />

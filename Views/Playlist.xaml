@@ -9,12 +9,7 @@
 
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled">
-            <StackPanel Padding="24,24,24,140" Spacing="16">
-                <StackPanel.ChildrenTransitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition IsStaggeringEnabled="True" />
-                    </TransitionCollection>
-                </StackPanel.ChildrenTransitions>
+            <StackPanel x:Name="RootPanel" Padding="24,24,24,140" Spacing="16">
                 <StackPanel Orientation="Horizontal" Spacing="16">
                     <Border
                         Width="200"
